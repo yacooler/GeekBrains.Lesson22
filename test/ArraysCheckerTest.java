@@ -1,76 +1,69 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.NullSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ArraysCheckerTest {
     private static ArraysChecker arraysChecker;
 
     @BeforeAll
     public static void init(){
-        //Какая-то инициализация
+        //Какая-то инициализация, которая делается один раз перед всемми тестами
+        //из-за этого она статик
         arraysChecker = new ArraysChecker();
     }
 
     @ParameterizedTest
-    @NullSource
-    @ValueSource(ints = {})
+    @NullAndEmptySource
     public void testCheckArrayEmptyOrNull(Integer[] arr){
         //Проверка на то, что нет исключений
-        Assertions.assertDoesNotThrow(()->{
+        assertDoesNotThrow(()->{
             arraysChecker.checkArray(arr);
         });
         //Проверка на возврат false
-        Assertions.assertEquals(arraysChecker.checkArray(arr), false);
+        assertFalse(arraysChecker.checkArray(arr));
     }
 
-    @ParameterizedTest
-    @CsvSource(
-            {"1,6,7,12,33,4,5,8,2,1,9"}
-    )
-    public void testCheckArrayContains14(Integer[] arr){
+    @Test
+    public void testCheckArrayContains14(){
         //Проверка на то, что нет исключений
-        Assertions.assertDoesNotThrow(()->{
-            arraysChecker.checkArray(arr);
+        assertDoesNotThrow(()->{
+            arraysChecker.checkArray(new Integer[]{1,6,7,12,33,4,5,8,2,1,9});
         });
         //Проверка на возврат true
-        Assertions.assertEquals(arraysChecker.checkArray(arr), true);
+        assertTrue(arraysChecker.checkArray(new Integer[]{1, 6, 7, 12, 33, 4, 5, 8, 2, 1, 9}));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {0,2,0,9,1,6,7})
-    public void testCheckArrayContains1(Integer[] arr){
+    @Test
+    public void testCheckArrayContains1(){
         //Проверка на то, что нет исключений
-        Assertions.assertDoesNotThrow(()->{
-            arraysChecker.checkArray(arr);
+        assertDoesNotThrow(()->{
+            arraysChecker.checkArray(new Integer[]{0,2,0,9,1,6,7});
         });
         //Проверка на возврат false
-        Assertions.assertEquals(arraysChecker.checkArray(arr), true);
+        assertTrue(arraysChecker.checkArray(new Integer[]{0, 2, 0, 9, 1, 6, 7}));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {8,2,3,9,6,6,4})
-    public void testCheckArrayContains4(Integer[] arr){
+    @Test
+    public void testCheckArrayContains4(){
         //Проверка на то, что нет исключений
-        Assertions.assertDoesNotThrow(()->{
-            arraysChecker.checkArray(arr);
+        assertDoesNotThrow(()->{
+            arraysChecker.checkArray(new Integer[]{8,2,3,9,6,6,4});
         });
         //Проверка на возврат true
-        Assertions.assertEquals(arraysChecker.checkArray(arr), true);
+        assertTrue(arraysChecker.checkArray(new Integer[]{8,2,3,9,6,6,4}));
     }
 
-    @ParameterizedTest
-    @ValueSource(ints = {8,2,3,9,6,6,12,6,11})
-    public void testCheckArrayNotContains14(Integer[] arr){
+    @Test
+    public void testCheckArrayNotContains14(){
         //Проверка на то, что нет исключений
-        Assertions.assertDoesNotThrow(()->{
-            arraysChecker.checkArray(arr);
+        assertDoesNotThrow(()->{
+            arraysChecker.checkArray(new Integer[]{8,2,3,9,6,6,12,6,11});
         });
-        //Проверка на возврат true
-        Assertions.assertEquals(arraysChecker.checkArray(arr), false);
+        //Проверка на возврат false, т.к. не содержит искомого
+        assertFalse(arraysChecker.checkArray(new Integer[]{8, 2, 3, 9, 6, 6, 12, 6, 11}));
     }
 }
